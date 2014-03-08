@@ -2,9 +2,10 @@
 #include "ui_mainwindow.h"
 #include <QMessageBox>
 #include "dialog.h"
-#include<QGraphicsScene>
-#include <cv.h>
-#include <highgui.h>
+#include <QGraphicsScene>
+#include "opencv2/core/core.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/highgui/highgui.hpp"
 
 
 using namespace cv;
