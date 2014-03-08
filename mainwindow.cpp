@@ -38,6 +38,9 @@ void MainWindow::on_pushButton_clicked()
 
 
 
+    ui->listWidget->addItem("Hello");
+    ui->listWidget->addItem("World");
+
    scene->addPixmap(pixmap);
    ui->graphicsView->setScene(scene);
    ui->graphicsView->show();
