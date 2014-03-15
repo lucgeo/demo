@@ -11,6 +11,8 @@
 using namespace cv;
 using namespace std;
 
+Mat img;
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -24,39 +26,47 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+QGraphicsScene *scene;
+
 void MainWindow::on_pushButton_clicked()
 {
     //ui->label->setText("salut!");
-    QGraphicsScene *scene = new QGraphicsScene;
-    Mat img = imread("/home/lucian/Proiecte/tutorial3/cat.jpg");
- //  QPixmap pixmap("/home/lucian/Proiecte/tutorial3/cat.jpg");
+    scene = new QGraphicsScene;
+     img = imread("/home/lucian/Proiecte/tutorial3/cat.jpg");
 
-   // Laplacian (img,img,CV_8U);
-//Sobel(img,img,CV_32F,1,0);
-    QImage imgIn= QImage((uchar*) img.data, img.cols, img.rows, img.step, QImage::Format_RGB888);
+     QImage imgIn= QImage((uchar*) img.data, img.cols, img.rows, img.step, QImage::Format_RGB888);
     QPixmap pixmap=QPixmap::fromImage(imgIn);
 
-
+    scene->addPixmap(pixmap);
+    ui->graphicsView->setScene(scene);
+    ui->graphicsView->show();
 
     ui->listWidget->addItem("Hello");
     ui->listWidget->addItem("World");
     ui->listWidget->addItem("salut");
-
-
-
-   scene->addPixmap(pixmap);
-   ui->graphicsView->setScene(scene);
-   ui->graphicsView->show();
 }
 
 void MainWindow::on_pushButton_2_clicked()
 {
     QMessageBox::warning(this,"titlu","atentie!");
+
+
 }
 
 void MainWindow::on_pushButton_3_clicked()
 {
-  Dialog win;
-  win.setModal(false);
-  win.exec();
+    QList<QListWidgetItem*> selected = ui->listWidget_2->selectedItems();
+    if(selected.count() > 0){
+
+        Point p(10,20);
+        string s =  selected[0]->text().toUtf8().constData();
+        putText(img,s, p,FONT_HERSHEY_SCRIPT_SIMPLEX,2,Scalar::all(255));
+
+        QImage imgIn= QImage((uchar*) img.data, img.cols, img.rows, img.step, QImage::Format_RGB888);
+       QPixmap pixmap=QPixmap::fromImage(imgIn);
+
+       scene->addPixmap(pixmap);
+       ui->graphicsView->setScene(scene);
+       ui->graphicsView->show();
+    }
 }
