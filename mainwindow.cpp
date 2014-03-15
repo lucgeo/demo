@@ -31,8 +31,8 @@ void MainWindow::on_pushButton_clicked()
     Mat img = imread("/home/lucian/Proiecte/tutorial3/cat.jpg");
  //  QPixmap pixmap("/home/lucian/Proiecte/tutorial3/cat.jpg");
 
-    Laplacian (img,img,CV_8U);
-
+   // Laplacian (img,img,CV_8U);
+//Sobel(img,img,CV_32F,1,0);
     QImage imgIn= QImage((uchar*) img.data, img.cols, img.rows, img.step, QImage::Format_RGB888);
     QPixmap pixmap=QPixmap::fromImage(imgIn);
 
@@ -40,6 +40,9 @@ void MainWindow::on_pushButton_clicked()
 
     ui->listWidget->addItem("Hello");
     ui->listWidget->addItem("World");
+    ui->listWidget->addItem("salut");
+
+
 
    scene->addPixmap(pixmap);
    ui->graphicsView->setScene(scene);
