@@ -38,22 +38,17 @@ void MainWindow::on_pushButton_clicked()
 
     scene = new QGraphicsScene;
     img = imread(fileName.toStdString(),CV_LOAD_IMAGE_COLOR);
-    cout<<"cols_a:"<<img.cols<<endl;
-    cout<<"rows_a:"<<img.rows<<endl;
-        Mat dest ;//= img;
+        Mat dest ;
 
         cvtColor(img, dest,CV_BGR2RGB);
 
-        cout<<"cols_b:"<<dest.cols<<endl;
-        cout<<"rows_b:"<<dest.rows<<endl;
-        QImage image((uchar*)dest.data, dest.cols, dest.rows,QImage::Format_RGB888);
+        QImage image=QImage((uchar*)dest.data, dest.cols, dest.rows,  img.step,QImage::Format_RGB888);
 
     QPixmap pixmap=QPixmap::fromImage(image);
 
     scene->addPixmap(pixmap);
     ui->graphicsView->setScene(scene);
     ui->graphicsView->show();
-
 
 }
 
