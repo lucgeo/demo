@@ -58,6 +58,9 @@ void MainWindow::on_pushButton_2_clicked()
     ui->listWidget->addItem("Red");
     ui->listWidget->addItem("Green");
     ui->listWidget->addItem("Blue");
+    ui->listWidget->addItem("Blur");
+    ui->listWidget->addItem("toGray");
+    ui->listWidget->addItem("toRGB");
 
 
 }
@@ -68,10 +71,30 @@ void MainWindow::on_pushButton_3_clicked()
 
    for(int i = 0; i < ui->listWidget_2->count(); i++)
    {
+
        QListWidgetItem* item = ui->listWidget_2->item(i);
-       QMessageBox::warning(this,"titlu","atentie!");
+       if(! item->text().compare("Blur")){
+           medianBlur(img,img,13); }
+
+       if(!item->text().compare("Red"))
+       {
+           //inRange(img,Scalar(0,0,0),Scalar(0,0,255),img);
+       }
+
+       if(!item->text().compare("toGray"))
+       {
+           cvtColor(img,img,CV_RGB2GRAY);
+       }
+
+       if(!item->text().compare("toRGB"))
+       {
+           cvtColor(img,img,CV_GRAY2RGB);
+       }
    }
-//inRange(img,Scalar(0,255,0),Scalar(255,255,255),img);
+
+//inRange(img,Scalar(127,127,127),Scalar(255,255,255),img);
+//QMessageBox::warning(this,"titlu","red");}
+
 
         QImage imgIn= QImage((uchar*) img.data, img.cols, img.rows, img.step, QImage::Format_RGB888);
        QPixmap pixmap=QPixmap::fromImage(imgIn);
