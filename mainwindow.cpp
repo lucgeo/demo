@@ -31,8 +31,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::show_image(Mat img)
 {
-    cvtColor(img, img,CV_BGR2RGB);
-
     QImage image=QImage((uchar*)img.data, img.cols, img.rows,  img.step,QImage::Format_RGB888);
     QPixmap pixmap=QPixmap::fromImage(image);
 
@@ -52,6 +50,7 @@ void MainWindow::on_pushButton_clicked()
 
     scene = new QGraphicsScene;
     baseImage = imread(fileName.toStdString(),CV_LOAD_IMAGE_COLOR);
+    cvtColor(baseImage, baseImage,CV_BGR2RGB);
 
     show_image(baseImage);
 }
