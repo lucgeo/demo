@@ -48,11 +48,13 @@ void MainWindow::on_pushButton_clicked()
     dialog.setViewMode(QFileDialog::Detail);
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "/home/lucian/Proiecte/tutorial3", tr("Images (*.png *.xpm *.jpg)"));
 
-    scene = new QGraphicsScene;
-    baseImage = imread(fileName.toStdString(),CV_LOAD_IMAGE_COLOR);
-    cvtColor(baseImage, baseImage,CV_BGR2RGB);
+    if( fileName.length() > 0){
+        scene = new QGraphicsScene;
+        baseImage = imread(fileName.toStdString(),CV_LOAD_IMAGE_COLOR);
+        cvtColor(baseImage, baseImage,CV_BGR2RGB);
 
-    show_image(baseImage);
+        show_image(baseImage);
+    }
 }
 
 
