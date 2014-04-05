@@ -25,9 +25,14 @@ private slots:
 
     void on_pushButton_4_clicked();
 
+    void on_pushButton_5_clicked();
+
+    void on_pushButton_6_clicked();
+
 private:
     Ui::MainWindow *ui;
     void show_image(cv::Mat img);
+    cv::Mat compute_image(cv::Mat dest);
 
 };
 

@@ -39,6 +39,40 @@ void MainWindow::show_image(Mat img)
     ui->graphicsView->show();
 }
 
+Mat MainWindow::compute_image(Mat dest)
+{
+    if(ui->listWidget_2->count()==0)
+    {
+        QMessageBox::warning(this,"warning","nu ai selectat nicio functie!");
+    }
+
+    for(int i = 0; i < ui->listWidget_2->count(); i++)
+    {
+        /*inherit qlist widget in a class8*/
+
+
+        QListWidgetItem* item = ui->listWidget_2->item(i);
+        if(! item->text().compare("Blur")){
+            medianBlur(dest,dest,13); }
+
+        if(!item->text().compare("Red"))
+        {
+            inRange(dest,Scalar(127,0,0),Scalar(255,255,255),dest);
+        }
+
+        if(!item->text().compare("toGray"))
+        {
+            cvtColor(dest,dest,CV_RGB2GRAY);
+        }
+
+        if(!item->text().compare("toRGB"))
+        {
+            cvtColor(dest,dest,CV_GRAY2RGB);
+        }
+    }
+    return dest;
+}
+
 
 
 void MainWindow::on_pushButton_clicked()
@@ -70,34 +104,9 @@ void MainWindow::on_pushButton_2_clicked()
 
 void MainWindow::on_pushButton_3_clicked()
 {
-    Mat dest=baseImage;
+    Mat dest;
 
-    if(ui->listWidget_2->count()==0)
-    {
-        QMessageBox::warning(this,"warning","nu ai selectat nicio functie!");
-    }
-
-    for(int i = 0; i < ui->listWidget_2->count(); i++)
-    {
-        QListWidgetItem* item = ui->listWidget_2->item(i);
-        if(! item->text().compare("Blur")){
-            medianBlur(dest,dest,13); }
-
-        if(!item->text().compare("Red"))
-        {
-            inRange(dest,Scalar(0,0,0),Scalar(0,0,255),dest);
-        }
-
-        if(!item->text().compare("toGray"))
-        {
-            cvtColor(dest,dest,CV_RGB2GRAY);
-        }
-
-        if(!item->text().compare("toRGB"))
-        {
-            cvtColor(dest,dest,CV_GRAY2RGB);
-        }
-    }
+    dest=compute_image(baseImage);
 
     show_image(dest);
 }
@@ -106,4 +115,21 @@ void MainWindow::on_pushButton_3_clicked()
 void MainWindow::on_pushButton_4_clicked()
 {
     ui->listWidget_2->clear();
+}
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    VideoCapture cap(0);
+    if(!cap.isOpened())
+        QMessageBox::warning(this,"webcam","camera nu poate fi pornita");
+    else
+    {
+        cap>>baseImage;
+        show_image(baseImage);
+    }
+}
+
+void MainWindow::on_pushButton_6_clicked()
+{
+
 }

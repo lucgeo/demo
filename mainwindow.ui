@@ -90,7 +90,7 @@
      <rect>
       <x>185</x>
       <y>431</y>
-      <width>411</width>
+      <width>311</width>
       <height>111</height>
      </rect>
     </property>
@@ -110,9 +110,9 @@
    <widget class="QPushButton" name="pushButton_3">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>90</y>
-      <width>111</width>
+      <x>510</x>
+      <y>430</y>
+      <width>91</width>
       <height>23</height>
      </rect>
     </property>
@@ -123,14 +123,40 @@
    <widget class="QPushButton" name="pushButton_4">
     <property name="geometry">
      <rect>
-      <x>600</x>
-      <y>480</y>
+      <x>510</x>
+      <y>470</y>
       <width>91</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
      <string>Clear</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_5">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>130</y>
+      <width>111</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Webcam</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_6">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>90</y>
+      <width>111</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Save  image</string>
     </property>
    </widget>
   </widget>
