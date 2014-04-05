@@ -39,8 +39,11 @@ void MainWindow::show_image(Mat img)
     ui->graphicsView->show();
 }
 
-Mat MainWindow::compute_image(Mat dest)
+Mat MainWindow::compute_image(Mat d)
 {
+    Mat dest;
+    d.copyTo(dest);
+
     if(ui->listWidget_2->count()==0)
     {
         QMessageBox::warning(this,"warning","nu ai selectat nicio functie!");
@@ -52,12 +55,31 @@ Mat MainWindow::compute_image(Mat dest)
 
 
         QListWidgetItem* item = ui->listWidget_2->item(i);
-        if(! item->text().compare("Blur")){
-            medianBlur(dest,dest,13); }
+        if(! item->text().compare("Blur"))
+        {
+            medianBlur(dest,dest,13);
+        }
 
         if(!item->text().compare("Red"))
         {
-            inRange(dest,Scalar(127,0,0),Scalar(255,255,255),dest);
+            Mat temp[3];
+            split(dest,temp);
+            dest = temp[0];
+           // inRange(dest,Scalar(127,0,0),Scalar(255,255,255),dest);
+        }
+
+        if(!item->text().compare("Green"))
+        {
+            Mat temp[3];
+            split(dest,temp);
+            dest = temp[1];
+        }
+
+        if(!item->text().compare("Blue"))
+        {
+            Mat temp[3];
+            split(dest,temp);
+            dest = temp[2];
         }
 
         if(!item->text().compare("toGray"))
@@ -68,6 +90,16 @@ Mat MainWindow::compute_image(Mat dest)
         if(!item->text().compare("toRGB"))
         {
             cvtColor(dest,dest,CV_GRAY2RGB);
+        }
+
+        if(!item->text().compare("Flip X"))
+        {
+            flip(dest,dest,0);
+        }
+
+        if(!item->text().compare("Flip Y"))
+        {
+            flip(dest,dest,1);
         }
     }
     return dest;
@@ -100,6 +132,8 @@ void MainWindow::on_pushButton_2_clicked()
     ui->listWidget->addItem("Blur");
     ui->listWidget->addItem("toGray");
     ui->listWidget->addItem("toRGB");
+    ui->listWidget->addItem("Flip X");
+    ui->listWidget->addItem("Flip Y");
 }
 
 void MainWindow::on_pushButton_3_clicked()
@@ -131,5 +165,9 @@ void MainWindow::on_pushButton_5_clicked()
 
 void MainWindow::on_pushButton_6_clicked()
 {
-
+    Mat img = compute_image(baseImage);
+    cvtColor(img,img,CV_RGB2BGR);
+    QString fileName =QFileDialog::getSaveFileName(this, tr("Save Image"),"result.png", tr("Images (*.jpg)"));
+    string imageName=fileName.toUtf8().constData();
+    imwrite(imageName,img);
 }
