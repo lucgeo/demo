@@ -13,8 +13,7 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    dialog.cpp
+        mainwindow.cpp
 
 INCLUDEPATH += /usr/local/include/opencv
 LIBS += -L/usr/local/lib
@@ -26,8 +25,6 @@ LIBS += -lopencv_features2d
 LIBS += -lopencv_objdetect
 LIBS += -lopencv_contrib
 
-HEADERS  += mainwindow.h \
-    dialog.h
+HEADERS  += mainwindow.h
 
-FORMS    += mainwindow.ui \
-    dialog.ui
+FORMS    += mainwindow.ui

@@ -6,7 +6,6 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 
-#include "dialog.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -21,6 +20,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    ui->listWidget->addItem("Red");
+    ui->listWidget->addItem("Green");
+    ui->listWidget->addItem("Blue");
+    ui->listWidget->addItem("Blur");
+    ui->listWidget->addItem("toGray");
+    ui->listWidget->addItem("toRGB");
+    ui->listWidget->addItem("Flip X");
+    ui->listWidget->addItem("Flip Y");
 }
 
 MainWindow::~MainWindow()
@@ -65,7 +73,6 @@ Mat MainWindow::compute_image(Mat d)
             Mat temp[3];
             split(dest,temp);
             dest = temp[0];
-           // inRange(dest,Scalar(127,0,0),Scalar(255,255,255),dest);
         }
 
         if(!item->text().compare("Green"))
@@ -102,19 +109,25 @@ Mat MainWindow::compute_image(Mat d)
             flip(dest,dest,1);
         }
     }
+
+    if(dest.channels() == 1){
+        cvtColor(dest,dest,CV_GRAY2RGB);
+    }
+
     return dest;
 }
 
 
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_SelectFile_clicked()
 {
     QFileDialog dialog(this);
     dialog.setNameFilter(tr("Images (*.png *.xpm *.jpg)"));
     dialog.setViewMode(QFileDialog::Detail);
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "/home/lucian/Proiecte/tutorial3", tr("Images (*.png *.xpm *.jpg)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "~", tr("Images (*.png *.xpm *.jpg)"));
 
-    if( fileName.length() > 0){
+    if( fileName.length() > 0)
+    {
         scene = new QGraphicsScene;
         baseImage = imread(fileName.toStdString(),CV_LOAD_IMAGE_COLOR);
         cvtColor(baseImage, baseImage,CV_BGR2RGB);
@@ -123,20 +136,7 @@ void MainWindow::on_pushButton_clicked()
     }
 }
 
-
-void MainWindow::on_pushButton_2_clicked()
-{
-    ui->listWidget->addItem("Red");
-    ui->listWidget->addItem("Green");
-    ui->listWidget->addItem("Blue");
-    ui->listWidget->addItem("Blur");
-    ui->listWidget->addItem("toGray");
-    ui->listWidget->addItem("toRGB");
-    ui->listWidget->addItem("Flip X");
-    ui->listWidget->addItem("Flip Y");
-}
-
-void MainWindow::on_pushButton_3_clicked()
+void MainWindow::on_Iterate_clicked()
 {
     Mat dest;
 
@@ -146,16 +146,22 @@ void MainWindow::on_pushButton_3_clicked()
 }
 
 
-void MainWindow::on_pushButton_4_clicked()
+void MainWindow::on_Clear_clicked()
 {
-    ui->listWidget_2->clear();
+    QList<QListWidgetItem*> selected=ui->listWidget_2->selectedItems();
+    for(int i=0;i<selected.length();i++)
+    {
+        delete selected[i];
+    }
 }
 
-void MainWindow::on_pushButton_5_clicked()
+void MainWindow::on_Webcam_clicked()
 {
     VideoCapture cap(0);
     if(!cap.isOpened())
+    {
         QMessageBox::warning(this,"webcam","camera nu poate fi pornita");
+    }
     else
     {
         cap>>baseImage;
@@ -163,11 +169,16 @@ void MainWindow::on_pushButton_5_clicked()
     }
 }
 
-void MainWindow::on_pushButton_6_clicked()
+void MainWindow::on_SaveImage_clicked()
 {
     Mat img = compute_image(baseImage);
     cvtColor(img,img,CV_RGB2BGR);
     QString fileName =QFileDialog::getSaveFileName(this, tr("Save Image"),"result.png", tr("Images (*.jpg)"));
     string imageName=fileName.toUtf8().constData();
+    if( imageName.length() > 0)
     imwrite(imageName,img);
 }
+
+
+
+
