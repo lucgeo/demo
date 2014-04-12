@@ -21,14 +21,14 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->listWidget->addItem("Red");
-    ui->listWidget->addItem("Green");
-    ui->listWidget->addItem("Blue");
-    ui->listWidget->addItem("Blur");
-    ui->listWidget->addItem("toGray");
-    ui->listWidget->addItem("toRGB");
-    ui->listWidget->addItem("Flip X");
-    ui->listWidget->addItem("Flip Y");
+    ui->FunctionList->addItem("Red");
+    ui->FunctionList->addItem("Green");
+    ui->FunctionList->addItem("Blue");
+    ui->FunctionList->addItem("Blur");
+    ui->FunctionList->addItem("toGray");
+    ui->FunctionList->addItem("toRGB");
+    ui->FunctionList->addItem("Flip X");
+    ui->FunctionList->addItem("Flip Y");
 }
 
 MainWindow::~MainWindow()
@@ -39,7 +39,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::show_image(Mat img)
 {
-    QImage image=QImage((uchar*)img.data, img.cols, img.rows,  img.step,QImage::Format_RGB888);
+    QImage image=QImage((uchar*)img.data, img.cols, img.rows, img.step, QImage::Format_RGB888);
     QPixmap pixmap=QPixmap::fromImage(image);
 
     scene->addPixmap(pixmap);
@@ -52,17 +52,17 @@ Mat MainWindow::compute_image(Mat d)
     Mat dest;
     d.copyTo(dest);
 
-    if(ui->listWidget_2->count()==0)
+    if(ui->SelectedFunction->count()==0)
     {
         QMessageBox::warning(this,"warning","nu ai selectat nicio functie!");
     }
 
-    for(int i = 0; i < ui->listWidget_2->count(); i++)
+    for(int i = 0; i < ui->SelectedFunction->count(); i++)
     {
         /*inherit qlist widget in a class8*/
 
 
-        QListWidgetItem* item = ui->listWidget_2->item(i);
+        QListWidgetItem* item = ui->SelectedFunction->item(i);
         if(! item->text().compare("Blur"))
         {
             medianBlur(dest,dest,13);
@@ -111,7 +111,7 @@ Mat MainWindow::compute_image(Mat d)
     }
 
     if(dest.channels() == 1){
-        cvtColor(dest,dest,CV_GRAY2RGB);
+        cvtColor(dest, dest, CV_GRAY2RGB);
     }
 
     return dest;
@@ -129,8 +129,8 @@ void MainWindow::on_SelectFile_clicked()
     if( fileName.length() > 0)
     {
         scene = new QGraphicsScene;
-        baseImage = imread(fileName.toStdString(),CV_LOAD_IMAGE_COLOR);
-        cvtColor(baseImage, baseImage,CV_BGR2RGB);
+        baseImage = imread(fileName.toStdString(), CV_LOAD_IMAGE_COLOR);
+        cvtColor(baseImage, baseImage, CV_BGR2RGB);
 
         show_image(baseImage);
     }
@@ -148,8 +148,8 @@ void MainWindow::on_Iterate_clicked()
 
 void MainWindow::on_Clear_clicked()
 {
-    QList<QListWidgetItem*> selected=ui->listWidget_2->selectedItems();
-    for(int i=0;i<selected.length();i++)
+    QList<QListWidgetItem*> selected=ui->SelectedFunction->selectedItems();
+    for(int i=0; i<selected.length(); i++)
     {
         delete selected[i];
     }
@@ -160,7 +160,7 @@ void MainWindow::on_Webcam_clicked()
     VideoCapture cap(0);
     if(!cap.isOpened())
     {
-        QMessageBox::warning(this,"webcam","camera nu poate fi pornita");
+        QMessageBox::warning(this, "webcam", "camera nu poate fi pornita");
     }
     else
     {
@@ -172,13 +172,9 @@ void MainWindow::on_Webcam_clicked()
 void MainWindow::on_SaveImage_clicked()
 {
     Mat img = compute_image(baseImage);
-    cvtColor(img,img,CV_RGB2BGR);
-    QString fileName =QFileDialog::getSaveFileName(this, tr("Save Image"),"result.png", tr("Images (*.jpg)"));
+    cvtColor(img, img, CV_RGB2BGR);
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Image"), "result.png", tr("Images (*.jpg)"));
     string imageName=fileName.toUtf8().constData();
     if( imageName.length() > 0)
-    imwrite(imageName,img);
+    imwrite(imageName, img);
 }
-
-
-
-
